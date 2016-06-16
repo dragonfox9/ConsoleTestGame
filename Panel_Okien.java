@@ -3,12 +3,17 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInput;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -41,29 +46,52 @@ import javax.swing.text.StyledDocument;
  */
 
 public class Panel_Okien extends JFrame implements ActionListener, Serializable {
-	private JFrame Frame;
-	private JPanel Panel;
-	private JButton BUTTON_WYŒLIJ;
-	JTextField textInput;
-	private JTextPane print;
-	private JScrollPane Scrollpane;
+	private static JFrame Frame;
+	private static JPanel Panel;
+	private static JButton btnButton;
+	static JTextField textInput;
+	private static JTextPane print;
+	private static JScrollPane Scrollpane;
 	private final static String nowaLinia = "\n";
-	private JMenuBar MENU_BAR;
-	private JMenu MENU;
-	private JMenuItem btnSave;
-	private JMenuItem btnLoad;
-	private JMenuItem btnExit;
-	private String command = null;
-	public StyledDocument Dokument;
+	private static JMenuBar MENU_BAR;
+	private static JMenu MENU;
+	private static JMenuItem btnSave;
+	private static JMenuItem btnLoad;
+	private static JMenuItem btnExit;
+	private static String command = null;
+	public static StyledDocument doc;
 	private static final long serialVersionUID = 2L;
-
-	public static void main(String args[]) {
+	
+	private static final String FILE_FOLDER = "D:" + File.separatorChar + "test";
+    private static final String FILE_NAME = "character.data";
+    private static final String FILE_PATH = FILE_FOLDER + File.separatorChar + FILE_NAME;
+	
+	static Postaæ myCharacter = new Postaæ();
+	
+	public static void main(String args[]) throws ClassNotFoundException, IOException {
 		Panel_Okien nowe_okno = new Panel_Okien();
 		nowe_okno.setTitle("gra");
 		nowe_okno.setVisible(true);
 		nowe_okno.setLocationRelativeTo(null);
-
+		Beggining();
+		
+		
 	}
+	private static void saveCharacter(Postaæ myCharacter) throws IOException {
+        File folder = new File(FILE_FOLDER);
+        folder.mkdirs();
+        File file = new File(FILE_PATH);
+        try (OutputStream outputStream = new FileOutputStream(file); ObjectOutput output = new ObjectOutputStream(outputStream)) {
+            output.writeObject(myCharacter);
+        }
+    }
+ 
+    private static Postaæ loadCharacter() throws IOException, ClassNotFoundException {
+        try (InputStream file = new FileInputStream(FILE_PATH); ObjectInput input = new ObjectInputStream(file);) {
+            return (Postaæ) input.readObject();
+        }
+    }
+
 
 	public Panel_Okien() {
 		// wygl¹da jak windows, nie java.
@@ -80,6 +108,7 @@ public class Panel_Okien extends JFrame implements ActionListener, Serializable 
 		Panel = new JPanel();
 		Panel.setBorder(null);
 		Panel.setLayout(new BorderLayout(0, 0));
+		Panel.setVisible(true);
 		setContentPane(Panel);
 
 		// Komponenty
@@ -107,7 +136,7 @@ public class Panel_Okien extends JFrame implements ActionListener, Serializable 
 		print.setForeground(new Color(255, 255, 255));
 		print.setBorder(null);
 
-		Dokument = print.getStyledDocument();
+		doc = print.getStyledDocument();
 
 		Scrollpane = new JScrollPane(print);
 		Panel.add(Scrollpane);
@@ -138,17 +167,17 @@ public class Panel_Okien extends JFrame implements ActionListener, Serializable 
 
 		btnExit = new JMenuItem("Exit");
 		MENU.add(btnExit);
-		OPCJA_WYJDZ exit = new OPCJA_WYJDZ();
+		Exitoption exit = new Exitoption();
 		btnExit.addActionListener(exit);
 
 	}
 
-	public void print(String s, boolean trace) {
+	public static void print(String s, boolean trace) {
 		print(s, trace, new Color(255, 255, 255));
 		scrollBottom();
 	}
 
-	public void print(String s, boolean trace, Color c) {
+	public static void print(String s, boolean trace, Color c) {
 
 		javax.swing.text.Style style = print.addStyle("Style", null);
 		StyleConstants.setForeground(style, c);
@@ -163,7 +192,7 @@ public class Panel_Okien extends JFrame implements ActionListener, Serializable 
 		}
 
 		try {
-			Dokument.insertString(Dokument.getLength(), s, style);
+			doc.insertString(doc.getLength(), s, style);
 		} catch (Exception e) {
 		}
 
@@ -171,12 +200,12 @@ public class Panel_Okien extends JFrame implements ActionListener, Serializable 
 
 	}
 
-	public void println(String s, boolean trace) {
+	public static void println(String s, boolean trace) {
 		println(s, trace, new Color(255, 255, 255));
 		scrollBottom();
 	}
 
-	public void println(String s, boolean trace, Color c) {
+	public static void println(String s, boolean trace, Color c) {
 		print(s + "\n", trace, c);
 		scrollBottom();
 	}
@@ -185,15 +214,15 @@ public class Panel_Okien extends JFrame implements ActionListener, Serializable 
 		print.setCaretPosition(0);
 	}
 
-	public void scrollBottom() {
+	public static void scrollBottom() {
 		print.setCaretPosition(print.getDocument().getLength());
 	}
 
-	public void WYCZYŒÆ_KONSOLE() {
+	public void clearConsole() {
 		print.setText("");
 	}
 
-	public String btnLoad_KOMENDE() {
+	public String Load_cmd() {
 		command = null;
 		textInput.setEnabled(true);
 		textInput.requestFocusInWindow();
@@ -209,12 +238,11 @@ public class Panel_Okien extends JFrame implements ActionListener, Serializable 
 		return command;
 	}
 
-	public void _charInfo() {
-		Postaæ okno = new Postaæ();
-		print("<" + okno._getHealth() + "hp " + okno._getExp() + "xp" + ">", false, Color.CYAN);
+	public static void _charInfo() {
+		print("<" + myCharacter._getHealth() + "hp " + myCharacter._getExp() + "xp" + ">", false, Color.CYAN);
 	}
 
-	public String playerInput(boolean wypiszNaEkran) {
+	public static String playerInput(boolean wypiszNaEkran) {
 		command = null;
 
 		textInput.setEnabled(true);
@@ -242,7 +270,7 @@ public class Panel_Okien extends JFrame implements ActionListener, Serializable 
 
 	}
 
-	public class OPCJA_WYJDZ implements ActionListener {
+	public class Exitoption implements ActionListener {
 		public void actionPerformed(ActionEvent Exit) {
 			System.exit(0);
 
@@ -250,41 +278,61 @@ public class Panel_Okien extends JFrame implements ActionListener, Serializable 
 	}
 
 	public class Loadoption implements ActionListener {
-
 		public void actionPerformed(ActionEvent Load) {
-			Postaæ load = null;
-  	      try
-  	      {
-  	    	  ObjectInputStream ois = new ObjectInputStream(new FileInputStream("d://btnSaveGame.dat"));
-  	            load = (Postaæ)ois.readObject();
-  	            ois.close();
-  	      }catch(IOException i)
-  	      {
-  	         i.printStackTrace();
-  	         return;
-  	      }catch(ClassNotFoundException c)
-  	      {
-  	         System.out.println("Error: "+c);
-  	         c.printStackTrace();
-  	         return;
-  	      }
-  	      System.out.println(load.Name);
-  	}
-}
+			try {
+				loadCharacter();
+			} catch (ClassNotFoundException | IOException e) {
+				println("Error: "+e,false,Color.RED);
+				e.printStackTrace();
+			}
+		}
+	}
 
 	public class btnSaveoption implements ActionListener {
 		public void actionPerformed(ActionEvent btnSave) {
-			Postaæ saveChar = new Postaæ();
-    	    try {
-    	    	ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("d://btnSaveGame.dat"));
-    	        oos.writeObject(saveChar);
-    	        oos.flush();
-    	        oos.close();
-    	        
-    	    } catch (IOException ex) {
-    	        ex.printStackTrace();
-    	    }
-    	    System.out.println("File Saved!");
-    	}
+			try {
+				saveCharacter(myCharacter);
+			} catch (IOException e) {
+				println("Error: "+e,false,Color.RED);
+				e.printStackTrace();
+			}
 		}
 	}
+
+
+
+
+	public static void Beggining() throws IOException, ClassNotFoundException{
+		println(myCharacter._getCharName(),false,Color.RED);
+		println("Type \"next\"", false, Color.GREEN);
+		boolean prawda = true;
+		while(prawda){
+			String text = playerInput(true);
+			if(text.equals("next")){
+				prawda = false;
+			}
+			else if(text.equals("zapisz")){
+				saveCharacter(myCharacter);
+				
+				Postaæ loadedCharacter = loadCharacter();
+				println(loadedCharacter._getCharName(),false);
+			}
+			else if(text.equals("Wczytaj")){
+				Postaæ loadedCharacter = loadCharacter();
+				println(loadedCharacter._getCharName(),false);
+			}
+				
+		}
+		nextroom();
+	}
+	public static void nextroom() throws ClassNotFoundException, IOException{
+		println("Podaj swoje imiê: ", false);
+		String text = playerInput(true);
+		myCharacter._setCharName(text);
+		print("Twoje imiê to: ", false);
+		println(myCharacter._getCharName(), false,Color.RED);
+		Beggining();
+	}
+}
+
+
