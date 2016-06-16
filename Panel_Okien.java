@@ -33,7 +33,7 @@ import javax.swing.text.StyledDocument;
  * Aktualne funkcje konsoli:
  * 
  * WYåWIETL_TEKST("tekst") - wyúwietla tekst w konsoli
- * WCZYTAJ_KOMENDE() - wczytuje tekst wpisany przez gracza i wyúwietla go na konsoli
+ * btnLoad_KOMENDE() - wczytuje tekst wpisany przez gracza i wyúwietla go na konsoli
  * WYCZYå∆_KONSOLE() - czyúci aktualny tekst wyúwietlony przez konsolÍ
  * 
  * 
@@ -41,18 +41,18 @@ import javax.swing.text.StyledDocument;
  */
 
 public class Panel_Okien extends JFrame implements ActionListener, Serializable {
-	private JFrame okno_FRAME;
-	private JPanel okno_PANEL;
+	private JFrame Frame;
+	private JPanel Panel;
 	private JButton BUTTON_WYåLIJ;
-	JTextField POLE_TEKSTOWE;
+	JTextField textInput;
 	private JTextPane print;
-	private JScrollPane SCROLLOWANIE;
+	private JScrollPane Scrollpane;
 	private final static String nowaLinia = "\n";
 	private JMenuBar MENU_BAR;
 	private JMenu MENU;
-	private JMenuItem ZAPISZ;
-	private JMenuItem WCZYTAJ;
-	private JMenuItem WYJDè;
+	private JMenuItem btnSave;
+	private JMenuItem btnLoad;
+	private JMenuItem btnExit;
 	private String command = null;
 	public StyledDocument Dokument;
 	private static final long serialVersionUID = 2L;
@@ -77,30 +77,30 @@ public class Panel_Okien extends JFrame implements ActionListener, Serializable 
 
 		setBounds(200, 200, 700, 450);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		okno_PANEL = new JPanel();
-		okno_PANEL.setBorder(null);
-		okno_PANEL.setLayout(new BorderLayout(0, 0));
-		setContentPane(okno_PANEL);
+		Panel = new JPanel();
+		Panel.setBorder(null);
+		Panel.setLayout(new BorderLayout(0, 0));
+		setContentPane(Panel);
 
 		// Komponenty
 
 		Font font = new Font("Tahoma", Font.BOLD, 12);
 
-		POLE_TEKSTOWE = new JTextField();
-		okno_PANEL.add(POLE_TEKSTOWE, BorderLayout.SOUTH);
-		POLE_TEKSTOWE.setColumns(10);
-		POLE_TEKSTOWE.addActionListener(this);
-		POLE_TEKSTOWE.setEnabled(false);
-		POLE_TEKSTOWE.setBorder(null);
-		POLE_TEKSTOWE.setForeground(new Color(255, 255, 255));
-		POLE_TEKSTOWE.setBackground(new Color(0, 0, 0));
-		POLE_TEKSTOWE.setFont(font);
-		POLE_TEKSTOWE.setCaretColor(Color.RED);
-		POLE_TEKSTOWE.setText("");
+		textInput = new JTextField();
+		Panel.add(textInput, BorderLayout.SOUTH);
+		textInput.setColumns(10);
+		textInput.addActionListener(this);
+		textInput.setEnabled(false);
+		textInput.setBorder(null);
+		textInput.setForeground(new Color(255, 255, 255));
+		textInput.setBackground(new Color(0, 0, 0));
+		textInput.setFont(font);
+		textInput.setCaretColor(Color.RED);
+		textInput.setText("");
 
 		print = new JTextPane();
 		print.setEditable(false);
-		okno_PANEL.add(print, BorderLayout.CENTER);
+		Panel.add(print, BorderLayout.CENTER);
 		print.setAutoscrolls(true);
 		print.setFont(font);
 		print.setBackground(new Color(0, 0, 0));
@@ -109,37 +109,37 @@ public class Panel_Okien extends JFrame implements ActionListener, Serializable 
 
 		Dokument = print.getStyledDocument();
 
-		SCROLLOWANIE = new JScrollPane(print);
-		okno_PANEL.add(SCROLLOWANIE);
-		SCROLLOWANIE.setBorder(null);
-		SCROLLOWANIE.setBackground(new Color(0, 0, 0));
+		Scrollpane = new JScrollPane(print);
+		Panel.add(Scrollpane);
+		Scrollpane.setBorder(null);
+		Scrollpane.setBackground(new Color(0, 0, 0));
 
-		przyciski();
+		buttons();
 	}
 
-	public void przyciski() {
+	public void buttons() {
 		MENU_BAR = new JMenuBar();
 		setJMenuBar(MENU_BAR);
 		MENU_BAR.setBorder(null);
 
-		MENU = new JMenu("Plik");
+		MENU = new JMenu("File");
 		MENU_BAR.add(MENU);
 		MENU.setBorder(null);
 
-		ZAPISZ = new JMenuItem("Zapis gry");
-		MENU.add(ZAPISZ);
-		OPCJA_ZAPISZ zapis = new OPCJA_ZAPISZ();
-		ZAPISZ.addActionListener(zapis);
+		btnSave = new JMenuItem("Save game");
+		MENU.add(btnSave);
+		btnSaveoption save = new btnSaveoption();
+		btnSave.addActionListener(save);
 
-		WCZYTAJ = new JMenuItem("Wczytaj grÍ");
-		MENU.add(WCZYTAJ);
-		OPCJA_WCZYTAJ wczytaj = new OPCJA_WCZYTAJ();
-		WCZYTAJ.addActionListener(wczytaj);
+		btnLoad = new JMenuItem("Load game");
+		MENU.add(btnLoad);
+		Loadoption load = new Loadoption();
+		btnLoad.addActionListener(load);
 
-		WYJDè = new JMenuItem("Wyjdü");
-		MENU.add(WYJDè);
-		OPCJA_WYJDZ wyjdz = new OPCJA_WYJDZ();
-		WYJDè.addActionListener(wyjdz);
+		btnExit = new JMenuItem("Exit");
+		MENU.add(btnExit);
+		OPCJA_WYJDZ exit = new OPCJA_WYJDZ();
+		btnExit.addActionListener(exit);
 
 	}
 
@@ -193,10 +193,10 @@ public class Panel_Okien extends JFrame implements ActionListener, Serializable 
 		print.setText("");
 	}
 
-	public String WCZYTAJ_KOMENDE() {
+	public String btnLoad_KOMENDE() {
 		command = null;
-		POLE_TEKSTOWE.setEnabled(true);
-		POLE_TEKSTOWE.requestFocusInWindow();
+		textInput.setEnabled(true);
+		textInput.requestFocusInWindow();
 
 		do {
 			try {
@@ -205,7 +205,7 @@ public class Panel_Okien extends JFrame implements ActionListener, Serializable 
 			}
 		} while (command == null);
 
-		POLE_TEKSTOWE.setEnabled(false);
+		textInput.setEnabled(false);
 		return command;
 	}
 
@@ -214,11 +214,11 @@ public class Panel_Okien extends JFrame implements ActionListener, Serializable 
 		print("<" + okno._getHealth() + "hp " + okno._getExp() + "xp" + ">", false, Color.CYAN);
 	}
 
-	public String WCZYTAJ_KOMENDE(boolean wypiszNaEkran) {
+	public String playerInput(boolean wypiszNaEkran) {
 		command = null;
 
-		POLE_TEKSTOWE.setEnabled(true);
-		POLE_TEKSTOWE.requestFocusInWindow();
+		textInput.setEnabled(true);
+		textInput.requestFocusInWindow();
 		do {
 			try {
 				Thread.sleep(50);
@@ -226,7 +226,7 @@ public class Panel_Okien extends JFrame implements ActionListener, Serializable 
 			}
 		} while (command == null);
 
-		POLE_TEKSTOWE.setEnabled(false);
+		textInput.setEnabled(false);
 		if (wypiszNaEkran) {
 			_charInfo();
 			println(command, false);
@@ -237,8 +237,8 @@ public class Panel_Okien extends JFrame implements ActionListener, Serializable 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
-		command = POLE_TEKSTOWE.getText();
-		POLE_TEKSTOWE.setText("");
+		command = textInput.getText();
+		textInput.setText("");
 
 	}
 
@@ -249,13 +249,13 @@ public class Panel_Okien extends JFrame implements ActionListener, Serializable 
 		}
 	}
 
-	public class OPCJA_WCZYTAJ implements ActionListener {
+	public class Loadoption implements ActionListener {
 
 		public void actionPerformed(ActionEvent Load) {
 			PostaÊ load = null;
   	      try
   	      {
-  	    	  ObjectInputStream ois = new ObjectInputStream(new FileInputStream("d://saveGame.dat"));
+  	    	  ObjectInputStream ois = new ObjectInputStream(new FileInputStream("d://btnSaveGame.dat"));
   	            load = (PostaÊ)ois.readObject();
   	            ois.close();
   	      }catch(IOException i)
@@ -264,27 +264,27 @@ public class Panel_Okien extends JFrame implements ActionListener, Serializable 
   	         return;
   	      }catch(ClassNotFoundException c)
   	      {
-  	         System.out.println("Nie odnaleziono klasy");
+  	         System.out.println("Error: "+c);
   	         c.printStackTrace();
   	         return;
   	      }
-  	      System.out.println(load.imiÍ);
+  	      System.out.println(load.Name);
   	}
 }
 
-	public class OPCJA_ZAPISZ implements ActionListener {
-		public void actionPerformed(ActionEvent Save) {
-			PostaÊ postaÊ_save = new PostaÊ();
+	public class btnSaveoption implements ActionListener {
+		public void actionPerformed(ActionEvent btnSave) {
+			PostaÊ saveChar = new PostaÊ();
     	    try {
-    	    	ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("d://saveGame.dat"));
-    	        oos.writeObject(postaÊ_save);
+    	    	ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("d://btnSaveGame.dat"));
+    	        oos.writeObject(saveChar);
     	        oos.flush();
     	        oos.close();
     	        
     	    } catch (IOException ex) {
     	        ex.printStackTrace();
     	    }
-    	    System.out.println("Zapisano!");
+    	    System.out.println("File Saved!");
     	}
 		}
 	}

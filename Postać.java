@@ -10,11 +10,11 @@ import java.util.Scanner;
 public class Postaæ implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
-	static String imiê;
-	static int ¯ycie;
+	static String Name;
+	static int Health;
 	static int Exp;
 	
-	static Panel_Okien okno = new Panel_Okien();
+	static Panel_Okien frame = new Panel_Okien();
 	
 	public static void œpij(int a) {
 		try {
@@ -27,50 +27,50 @@ public class Postaæ implements Serializable {
 
 	
 	public void _charInfo(){
-		okno.print("<" + _getHealth() + "hp " + _getExp() + "xp" + ">", false, Color.CYAN);
+		frame.print("<" + _getHealth() + "hp " + _getExp() + "xp" + ">", false, Color.CYAN);
 	}
 
 	public int _getHealth() {
-		return ¯ycie;
+		return Health;
 	}
 
 	public String _getCharName() {
-		return imiê;
+		return Name;
 	}
 
 	public int _getExp() {
 		return Exp;
 	}
 	public String _setCharName(String a){
-		imiê = a;
-		return imiê;
+		Name = a;
+		return Name;
 		
 	}
 	
     
 
-    	public static void WPROWADZENIE() {
-    		okno.setTitle("Gra");
-    		okno.setVisible(true);
-    		okno.println("Twoje imiê to: "+imiê, false,Color.GRAY);
-    		okno.println("wpisz \"dalej\"", false, Color.GREEN);
-    		boolean prawda = true;
-    		while(prawda){
-    			String text = okno.WCZYTAJ_KOMENDE(true).toLowerCase();
-    			if(text.equals("dalej")){
-    				prawda = false;
+    	public static void Start() {
+    		frame.setTitle("TestGame");
+    		frame.setVisible(true);
+    		frame.println("Your name: "+Name, false,Color.GRAY);
+    		frame.println("type \"continue\"", false, Color.GREEN);
+    		boolean bool = true;
+    		while(bool){
+    			String text = frame.playerInput(true).toLowerCase();
+    			if(text.equals("continue")){
+    				bool = false;
     			}
     		}
-    		dalej();
+    		next();
 
     	}
     	
-    	public static void dalej(){
-    		okno.println("Podaj swoje imiê: ", false);
-    		imiê = okno.WCZYTAJ_KOMENDE(true);
-    		okno.print("Twoje imiê to: ", false);
-    		okno.println(imiê, false,Color.RED);
-    		WPROWADZENIE();
+    	public static void next(){
+    		frame.println("Who are you?: ", false);
+    		Name = frame.playerInput(true);
+    		frame.print("Your name: ", false);
+    		frame.println(Name, false,Color.RED);
+    		Start();
     	}
     	
     	
