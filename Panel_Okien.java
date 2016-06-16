@@ -252,15 +252,39 @@ public class Panel_Okien extends JFrame implements ActionListener, Serializable 
 	public class OPCJA_WCZYTAJ implements ActionListener {
 
 		public void actionPerformed(ActionEvent Load) {
-			Postaæ load = new Postaæ();
-			load._loadGame();
-		}
-	}
+			Postaæ load = null;
+  	      try
+  	      {
+  	    	  ObjectInputStream ois = new ObjectInputStream(new FileInputStream("d://saveGame.dat"));
+  	            load = (Postaæ)ois.readObject();
+  	            ois.close();
+  	      }catch(IOException i)
+  	      {
+  	         i.printStackTrace();
+  	         return;
+  	      }catch(ClassNotFoundException c)
+  	      {
+  	         System.out.println("Nie odnaleziono klasy");
+  	         c.printStackTrace();
+  	         return;
+  	      }
+  	      System.out.println(load.imiê);
+  	}
+}
 
 	public class OPCJA_ZAPISZ implements ActionListener {
 		public void actionPerformed(ActionEvent Save) {
-			Postaæ save = new Postaæ();
-			save._saveGame();
+			Postaæ postaæ_save = new Postaæ();
+    	    try {
+    	    	ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("d://saveGame.dat"));
+    	        oos.writeObject(postaæ_save);
+    	        oos.flush();
+    	        oos.close();
+    	        
+    	    } catch (IOException ex) {
+    	        ex.printStackTrace();
+    	    }
+    	    System.out.println("Zapisano!");
+    	}
 		}
 	}
-}

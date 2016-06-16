@@ -47,53 +47,16 @@ public class Postaæ implements Serializable {
 		
 	}
 	
-	
-
-	public void _saveGame(){
-		Postaæ postaæ_save = new Postaæ();
-	    try {
-	    	ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("d://saveGame.dat"));
-	        oos.writeObject(postaæ_save);
-	        
-	        oos.flush();
-	        oos.close();
-	        
-	    } catch (IOException ex) {
-	        ex.printStackTrace();
-	    }
-	    System.out.println("Zapisano!");
-	}
-	
-	public void _loadGame(){
-		Postaæ load = null;
-	      try
-	      {
-	    	  ObjectInputStream ois = new ObjectInputStream(new FileInputStream("d://saveGame.dat"));
-	            load = (Postaæ)ois.readObject();
-	            ois.close();
-	      }catch(IOException i)
-	      {
-	         i.printStackTrace();
-	         return;
-	      }catch(ClassNotFoundException c)
-	      {
-	         System.out.println("Nie odnaleziono klasy");
-	         c.printStackTrace();
-	         return;
-	      }
-	      System.out.println(load.imiê);
-	}
-	
     
 
     	public static void WPROWADZENIE() {
     		okno.setTitle("Gra");
     		okno.setVisible(true);
     		okno.println("Twoje imiê to: "+imiê, false,Color.GRAY);
-    		okno.println("Coœ tam", false, Color.GREEN);
+    		okno.println("wpisz \"dalej\"", false, Color.GREEN);
     		boolean prawda = true;
     		while(prawda){
-    			String text = okno.WCZYTAJ_KOMENDE(true);
+    			String text = okno.WCZYTAJ_KOMENDE(true).toLowerCase();
     			if(text.equals("dalej")){
     				prawda = false;
     			}
