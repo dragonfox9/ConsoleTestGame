@@ -5,15 +5,16 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.Scanner;
 
 public class Postaæ implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
-	String imiê;
-	int ¯ycie;
-	int Exp;
+	static String imiê;
+	static int ¯ycie;
+	static int Exp;
 	
-	Panel_Okien okno = new Panel_Okien();
+	static Panel_Okien okno = new Panel_Okien();
 	
 	public static void œpij(int a) {
 		try {
@@ -50,7 +51,6 @@ public class Postaæ implements Serializable {
 
 	public void _saveGame(){
 		Postaæ postaæ_save = new Postaæ();
-		postaæ_save.imiê = "£ukasz";
 	    try {
 	    	ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("d://saveGame.dat"));
 	        oos.writeObject(postaæ_save);
@@ -86,7 +86,7 @@ public class Postaæ implements Serializable {
 	
     
 
-    	public void WPROWADZENIE() {
+    	public static void WPROWADZENIE() {
     		okno.setTitle("Gra");
     		okno.setVisible(true);
     		okno.println("Twoje imiê to: "+imiê, false,Color.GRAY);
@@ -102,7 +102,7 @@ public class Postaæ implements Serializable {
 
     	}
     	
-    	public void dalej(){
+    	public static void dalej(){
     		okno.println("Podaj swoje imiê: ", false);
     		imiê = okno.WCZYTAJ_KOMENDE(true);
     		okno.print("Twoje imiê to: ", false);

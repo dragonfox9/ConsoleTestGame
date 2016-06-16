@@ -138,7 +138,7 @@ public class Panel_Okien extends JFrame implements ActionListener, Serializable 
 
 		WYJDè = new JMenuItem("Wyjdü");
 		MENU.add(WYJDè);
-		OPCJA_WYJDè wyjdz = new OPCJA_WYJDè();
+		OPCJA_WYJDZ wyjdz = new OPCJA_WYJDZ();
 		WYJDè.addActionListener(wyjdz);
 
 	}
@@ -211,7 +211,7 @@ public class Panel_Okien extends JFrame implements ActionListener, Serializable 
 
 	public void _charInfo() {
 		PostaÊ okno = new PostaÊ();
-		okno._charInfo();
+		print("<" + okno._getHealth() + "hp " + okno._getExp() + "xp" + ">", false, Color.CYAN);
 	}
 
 	public String WCZYTAJ_KOMENDE(boolean wypiszNaEkran) {
@@ -242,7 +242,7 @@ public class Panel_Okien extends JFrame implements ActionListener, Serializable 
 
 	}
 
-	public class OPCJA_WYJDè implements ActionListener {
+	public class OPCJA_WYJDZ implements ActionListener {
 		public void actionPerformed(ActionEvent Exit) {
 			System.exit(0);
 
