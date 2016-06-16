@@ -60,9 +60,13 @@ public class Panel_Okien extends JFrame implements ActionListener, Serializable 
 	private static JMenuItem btnExit;
 	private static String command = null;
 	public static StyledDocument doc;
+	private static char classpatch;
 	private static final long serialVersionUID = 2L;
 	
-	private static final String FILE_FOLDER = "D:" + File.separatorChar + "test";
+	
+	//informacje na temat miejsca zapisu pliku
+	String classpath = System.getProperty("java.class.path");
+	private static final String FILE_FOLDER = classpatch + File.separatorChar + "save";
     private static final String FILE_NAME = "character.data";
     private static final String FILE_PATH = FILE_FOLDER + File.separatorChar + FILE_NAME;
 	
@@ -73,10 +77,11 @@ public class Panel_Okien extends JFrame implements ActionListener, Serializable 
 		nowe_okno.setTitle("gra");
 		nowe_okno.setVisible(true);
 		nowe_okno.setLocationRelativeTo(null);
-		Beggining();
+		menuStart();
 		
 		
 	}
+	//zapisywanie postaci do pliku
 	private static void saveCharacter(Postaæ myCharacter) throws IOException {
         File folder = new File(FILE_FOLDER);
         folder.mkdirs();
@@ -85,7 +90,7 @@ public class Panel_Okien extends JFrame implements ActionListener, Serializable 
             output.writeObject(myCharacter);
         }
     }
- 
+	//wczytywanie postaci z pliku
     private static Postaæ loadCharacter() throws IOException, ClassNotFoundException {
         try (InputStream file = new FileInputStream(FILE_PATH); ObjectInput input = new ObjectInputStream(file);) {
             return (Postaæ) input.readObject();
@@ -280,12 +285,15 @@ public class Panel_Okien extends JFrame implements ActionListener, Serializable 
 	public class Loadoption implements ActionListener {
 		public void actionPerformed(ActionEvent Load) {
 			try {
-				loadCharacter();
+				myCharacter = loadCharacter();
+				println(myCharacter._getCharName(),false);
 			} catch (ClassNotFoundException | IOException e) {
 				println("Error: "+e,false,Color.RED);
 				e.printStackTrace();
+				}
 			}
-		}
+			
+		
 	}
 
 	public class btnSaveoption implements ActionListener {
@@ -302,36 +310,34 @@ public class Panel_Okien extends JFrame implements ActionListener, Serializable 
 
 
 
-	public static void Beggining() throws IOException, ClassNotFoundException{
-		println(myCharacter._getCharName(),false,Color.RED);
-		println("Type \"next\"", false, Color.GREEN);
-		boolean prawda = true;
-		while(prawda){
-			String text = playerInput(true);
-			if(text.equals("next")){
-				prawda = false;
-			}
-			else if(text.equals("zapisz")){
-				saveCharacter(myCharacter);
-				
-				Postaæ loadedCharacter = loadCharacter();
-				println(loadedCharacter._getCharName(),false);
-			}
-			else if(text.equals("Wczytaj")){
-				Postaæ loadedCharacter = loadCharacter();
-				println(loadedCharacter._getCharName(),false);
-			}
-				
+	public static void menuStart() throws IOException, ClassNotFoundException{
+		
+		boolean bool = true;
+		println("Co chcesz zrobiæ?\n1.Wczytaj Postaæ\n2.Stwórz now¹ postaæ",false);
+		while(bool){
+		String text = playerInput(true).toLowerCase();
+		if(text.equals("1")){
+			myCharacter = loadCharacter();
+			println("Pomyœlnie wczytano: "+myCharacter._getCharName(),false);
+			bool = false;
 		}
+		else if(text.equals("2")){
+			println("Wprowadz imiê: ",false);
+			myCharacter._setCharName(playerInput(true));
+			println("Pomyœlnie stworzono: "+myCharacter._getCharName(),false);
+			saveCharacter(myCharacter);
+			bool = false;
+		}
+		else println("Nie rozumiem co mówiê..",false);
+		}
+	
 		nextroom();
+		
+		
+		
 	}
 	public static void nextroom() throws ClassNotFoundException, IOException{
-		println("Podaj swoje imiê: ", false);
-		String text = playerInput(true);
-		myCharacter._setCharName(text);
-		print("Twoje imiê to: ", false);
-		println(myCharacter._getCharName(), false,Color.RED);
-		Beggining();
+		
 	}
 }
 
