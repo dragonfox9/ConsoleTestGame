@@ -1,14 +1,7 @@
-import java.awt.Color;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.util.Scanner;
 
 public class Postaæ implements Serializable {
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 124240055341L;
 	
 	private String Name;
 	private int Health;
@@ -27,6 +20,11 @@ public class Postaæ implements Serializable {
 	}
 	public void _setCharName(String Name){
 		this.Name = Name;
+		
+	}
+	
+	public void _setHealth(int Health){
+		this.Health = Health;
 		
 	}
 	

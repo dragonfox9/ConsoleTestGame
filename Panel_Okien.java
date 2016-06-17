@@ -48,7 +48,6 @@ import javax.swing.text.StyledDocument;
 public class Panel_Okien extends JFrame implements ActionListener, Serializable {
 	private static JFrame Frame;
 	private static JPanel Panel;
-	private static JButton btnButton;
 	static JTextField textInput;
 	private static JTextPane print;
 	private static JScrollPane Scrollpane;
@@ -71,13 +70,13 @@ public class Panel_Okien extends JFrame implements ActionListener, Serializable 
     private static final String FILE_PATH = FILE_FOLDER + File.separatorChar + FILE_NAME;
 	
 	static Postaæ myCharacter = new Postaæ();
+	static Panel_Okien nowe_okno = new Panel_Okien();
 	
 	public static void main(String args[]) throws ClassNotFoundException, IOException {
-		Panel_Okien nowe_okno = new Panel_Okien();
 		nowe_okno.setTitle("gra");
 		nowe_okno.setVisible(true);
 		nowe_okno.setLocationRelativeTo(null);
-		menuStart();
+		Start();
 		
 		
 	}
@@ -159,10 +158,10 @@ public class Panel_Okien extends JFrame implements ActionListener, Serializable 
 		MENU = new JMenu("File");
 		MENU_BAR.add(MENU);
 		MENU.setBorder(null);
-
+		
 		btnSave = new JMenuItem("Save game");
 		MENU.add(btnSave);
-		btnSaveoption save = new btnSaveoption();
+		Saveoption save = new Saveoption();
 		btnSave.addActionListener(save);
 
 		btnLoad = new JMenuItem("Load game");
@@ -223,7 +222,7 @@ public class Panel_Okien extends JFrame implements ActionListener, Serializable 
 		print.setCaretPosition(print.getDocument().getLength());
 	}
 
-	public void clearConsole() {
+	public static void clearConsole() {
 		print.setText("");
 	}
 
@@ -281,23 +280,32 @@ public class Panel_Okien extends JFrame implements ActionListener, Serializable 
 
 		}
 	}
+	
+
 
 	public class Loadoption implements ActionListener {
 		public void actionPerformed(ActionEvent Load) {
 			try {
+				println("Wczytywanie informacji o postaæi: ",false,Color.RED);
 				myCharacter = loadCharacter();
-				println(myCharacter._getCharName(),false);
+				myCharacter.œpij(1000);
+				println("Wczytano imiê: "+myCharacter._getCharName(),false);
+				myCharacter.œpij(1000);
+				println("Wczytano iloœæ doœwiadczenia: "+myCharacter._getExp(),false);
+				myCharacter.œpij(1000);
+				println("Wczytano poziom ¿ycia: "+myCharacter._getHealth(),false);
 			} catch (ClassNotFoundException | IOException e) {
 				println("Error: "+e,false,Color.RED);
 				e.printStackTrace();
 				}
 			}
+		
 			
 		
 	}
 
-	public class btnSaveoption implements ActionListener {
-		public void actionPerformed(ActionEvent btnSave) {
+	public class Saveoption implements ActionListener {
+		public void actionPerformed(ActionEvent Save) {
 			try {
 				saveCharacter(myCharacter);
 			} catch (IOException e) {
@@ -308,24 +316,56 @@ public class Panel_Okien extends JFrame implements ActionListener, Serializable 
 	}
 
 
+	public static void Start(){
+		nowe_okno.setVisible(true);
+		menuStart();
+	}
 
-
-	public static void menuStart() throws IOException, ClassNotFoundException{
+	public static void menuStart(){
 		
 		boolean bool = true;
 		println("Co chcesz zrobiæ?\n1.Wczytaj Postaæ\n2.Stwórz now¹ postaæ",false);
 		while(bool){
-		String text = playerInput(true).toLowerCase();
+		String text = playerInput(false).toLowerCase();
 		if(text.equals("1")){
-			myCharacter = loadCharacter();
-			println("Pomyœlnie wczytano: "+myCharacter._getCharName(),false);
+			try {
+				myCharacter = loadCharacter();
+			} catch (ClassNotFoundException e) {
+				println("Error: "+e,false,Color.RED);
+				e.printStackTrace();
+			} catch (IOException e) {
+				println("Error: "+e,false,Color.RED);
+				e.printStackTrace();
+			}
+			print("Pomyœlnie wczytano postaæ: ",false);
+			println(myCharacter._getCharName()+"\n\n\n",false,Color.GREEN);
+			print("Wczytujê œwiat",false,Color.RED);
+			myCharacter.œpij(400);
+			print(".",false,Color.RED);
+			myCharacter.œpij(400);
+			print(".",false,Color.RED);
+			myCharacter.œpij(400);
+			print(".",false,Color.RED);
+			myCharacter.œpij(400);
+			println(".",false,Color.RED);
+			myCharacter.œpij(400);
+			println("Wczytano œwiat!",false,Color.RED);
+			myCharacter.œpij(2000);
+			clearConsole();
 			bool = false;
+			nextroom();
 		}
 		else if(text.equals("2")){
 			println("Wprowadz imiê: ",false);
-			myCharacter._setCharName(playerInput(true));
-			println("Pomyœlnie stworzono: "+myCharacter._getCharName(),false);
-			saveCharacter(myCharacter);
+			myCharacter._setCharName(playerInput(false));
+			myCharacter._setHealth(100);
+			println("Pomyœlnie stworzono: "+myCharacter._getCharName()+", ¯ycie:"+myCharacter._getHealth(),false);
+			try {
+				saveCharacter(myCharacter);
+			} catch (IOException e) {
+				println("Error: "+e,false,Color.RED);
+				e.printStackTrace();
+			}
 			bool = false;
 		}
 		else println("Nie rozumiem co mówiê..",false);
@@ -336,7 +376,23 @@ public class Panel_Okien extends JFrame implements ActionListener, Serializable 
 		
 		
 	}
-	public static void nextroom() throws ClassNotFoundException, IOException{
+	public static void nextroom(){
+		println("Witaj "+myCharacter._getCharName()+"\nWpisz \"robot\", coœ zobaczysz ;-)",false);
+		boolean bool = true;
+		while(bool){
+			String string = myCharacter._getCharName()+" to bardzo g³upie imiê XDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD :D test test test :D";
+	        String[] characterTable = string.split("");
+			String text = playerInput(true).toLowerCase();
+			if(text.equals("robot")){
+				for (String character : characterTable) {
+					myCharacter.œpij(35);
+		            print(character,false);
+		        }
+				}
+			else if(text.equals("menu")){
+				menuStart();
+			}
+		}
 		
 	}
 }
