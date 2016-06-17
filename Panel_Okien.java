@@ -380,14 +380,18 @@ public class Panel_Okien extends JFrame implements ActionListener, Serializable 
 		println("Witaj "+myCharacter._getCharName()+"\nWpisz \"robot\", coœ zobaczysz ;-)",false);
 		boolean bool = true;
 		while(bool){
-			String string = myCharacter._getCharName()+" to bardzo g³upie imiê XDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD :D test test test :D";
-	        String[] characterTable = string.split("");
+			String string;
 			String text = playerInput(true).toLowerCase();
 			if(text.equals("robot")){
+				println("Wprowadz tekst, ktory robot ma wypisaæ(np. Ania jest g³upia):",false);
+				string = playerInput(true);
+		        String[] characterTable = string.split("");
+		        print("Napisa³eœ: ",false,Color.RED);
 				for (String character : characterTable) {
-					myCharacter.œpij(35);
+					myCharacter.œpij(50);
 		            print(character,false);
 		        }
+				println("",false);
 				}
 			else if(text.equals("menu")){
 				menuStart();
